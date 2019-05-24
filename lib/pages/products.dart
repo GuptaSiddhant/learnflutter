@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import '../product_manager.dart';
 
 class ProductsPage extends StatelessWidget {
-  final List<Map<String, String>> products;
-  final Function addProduct;
-  final Function deleteProduct;
-
-  ProductsPage({this.products, this.addProduct, this.deleteProduct});
+  final List<Map<String, dynamic>> products;
+  ProductsPage({this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +25,7 @@ class ProductsPage extends StatelessWidget {
             ListTile(
               title: Text('Logout'),
               onTap: () {
-                Navigator.pushReplacementNamed(context, '/auth');
+                Navigator.pushReplacementNamed(context, '/');
               },
             ),
           ],
@@ -38,9 +35,7 @@ class ProductsPage extends StatelessWidget {
         title: Text('Learner'),
       ),
       body: ProductManager(
-        products: products,
-        addProduct: addProduct,
-        deleteProduct: deleteProduct,
+        products: products
       ),
     );
   }

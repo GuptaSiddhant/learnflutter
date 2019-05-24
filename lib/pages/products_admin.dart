@@ -2,7 +2,19 @@ import 'package:flutter/material.dart';
 import './product_create.dart';
 import './product_list.dart';
 
-class ProductsAdminPage extends StatelessWidget {
+class ProductsAdminPage extends StatefulWidget {
+  final List<Map<String, dynamic>> products;
+  final Function addProduct;
+  final Function deleteProduct;
+
+  ProductsAdminPage({this.products, this.addProduct, this.deleteProduct});
+
+  @override
+  State<StatefulWidget> createState() {  
+    return _ProductAdminPageState();
+  }
+}
+class _ProductAdminPageState extends State<ProductsAdminPage>{
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -18,13 +30,13 @@ class ProductsAdminPage extends StatelessWidget {
                 ListTile(
                   title: Text('Products List'),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/');
+                    Navigator.pushReplacementNamed(context, '/products');
                   },
                 ),
                 ListTile(
                   title: Text('Logout'),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/auth');
+                    Navigator.pushReplacementNamed(context, '/');
                   },
                 ),
               ],
@@ -47,7 +59,7 @@ class ProductsAdminPage extends StatelessWidget {
           ),
           body: TabBarView(
             children: <Widget>[
-              ProductCreatePage(),
+              ProductCreatePage(addProduct: widget.addProduct,),
               ProductListPage(),
             ],
           )
