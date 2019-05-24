@@ -1,42 +1,45 @@
 import 'package:flutter/material.dart';
 
-import '../product_manager.dart';
+import '../widgets/products/products.dart';
 
 class ProductsPage extends StatelessWidget {
   final List<Map<String, dynamic>> products;
   ProductsPage({this.products});
 
+  Widget _buildSideDrawer(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: <Widget>[
+          AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('Menu'),
+          ),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('Manage Products'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/admin');
+            },
+          ),
+          ListTile(
+            // leading: Icon(Icons.delete),
+            title: Text('Logout'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: Column(
-          children: <Widget>[
-            AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Menu'),
-            ),
-            ListTile(
-              title: Text('Manage Products'),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/admin');
-              },
-            ),
-            ListTile(
-              title: Text('Logout'),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/');
-              },
-            ),
-          ],
+        drawer: _buildSideDrawer(context),
+        appBar: AppBar(
+          title: Text('Learner'),
         ),
-      ),
-      appBar: AppBar(
-        title: Text('Learner'),
-      ),
-      body: ProductManager(
-        products: products
-      ),
-    );
+        body: Products(products));
   }
 }

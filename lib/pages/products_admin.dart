@@ -15,12 +15,9 @@ class ProductsAdminPage extends StatefulWidget {
   }
 }
 class _ProductAdminPageState extends State<ProductsAdminPage>{
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-          drawer: Drawer(
+
+  Widget _buildSideDrawer(BuildContext context) {
+    return Drawer(
             child: Column(
               children: <Widget>[
                 AppBar(
@@ -28,6 +25,7 @@ class _ProductAdminPageState extends State<ProductsAdminPage>{
                   title: Text('Menu'),
                 ),
                 ListTile(
+                  leading: Icon(Icons.shop),
                   title: Text('Products List'),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, '/products');
@@ -41,7 +39,15 @@ class _ProductAdminPageState extends State<ProductsAdminPage>{
                 ),
               ],
             ),
-          ),
+          );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          drawer: _buildSideDrawer(context),
           appBar: AppBar(
             title: Text('Admin'),
             bottom: TabBar(
