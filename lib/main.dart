@@ -28,6 +28,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _updateProduct({Map<String, dynamic> product, int index}) {
+    setState(() {
+      _products[index] = product;
+    });
+  }
+
+
   void _deleteProduct(int index) {
     setState(() {
       _products.removeAt(index);
@@ -58,6 +65,7 @@ class _MyAppState extends State<MyApp> {
         '/admin': (BuildContext context) => ProductsAdminPage(
               products: _products,
               addProduct: _addProduct,
+              updateProduct: _updateProduct,
               deleteProduct: _deleteProduct,
             ),
       },

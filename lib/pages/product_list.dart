@@ -1,8 +1,72 @@
 import 'package:flutter/material.dart';
 
+import './product_edit.dart';
+
 class ProductListPage extends StatelessWidget {
+  final List<Map<String, dynamic>> products;
+  final Function updateProduct;
+  final Function deleteProduct;
+  ProductListPage({this.products, this.updateProduct, this.deleteProduct});
+
+  Widget _buildEditButton(BuildContext context, int index) {
+    return IconButton(
+      icon: Icon(Icons.edit),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return ProductEditPage(
+                product: products[index],
+                updateProduct: updateProduct,
+                productIndex: index,
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, int index) {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          leading: CircleAvatar(
+            backgroundImage: AssetImage(
+              products[index]['imageUrl'],
+            ),
+          ),
+          title: Text(products[index]['title']),
+          subtitle: Text('\$' + products[index]['price'].toString()),
+          trailing: _buildEditButton(context, index),
+        ),
+        Divider(
+          indent: 70.0,
+          height: 1.0,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('All'),);
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        return Dismissible(
+          key: Key(products[index]['title']),
+          onDismissed: (DismissDirection direction) {
+            if (direction == DismissDirection.endToStart) {
+              deleteProduct(index);
+            } else if (direction == DismissDirection.startToEnd) {
+            } else {}
+          },
+          background: Container(
+            color: Colors.red,
+          ),
+          child: _buildListItem(context, index),
+        );
+      },
+      itemCount: products.length,
+    );
   }
 }

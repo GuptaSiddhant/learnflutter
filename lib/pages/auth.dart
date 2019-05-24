@@ -8,9 +8,13 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  String _emailValue = '';
-  String _passwordValue = '';
-  bool _termsValue = false;
+  final Map<String, dynamic> _userCredentials = {
+    'email': null,
+    'password': null,
+    'acceptTerms': false,
+  };
+
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
 
   DecorationImage _buildBackgroundImange() {
     return DecorationImage(
@@ -24,7 +28,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildEmailTextField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
         labelText: 'E-Mail',
         filled: true,
@@ -32,36 +36,44 @@ class _AuthPageState extends State<AuthPage> {
       ),
       autofocus: true,
       keyboardType: TextInputType.emailAddress,
-      onChanged: (String value) {
-        setState(() {
-          _emailValue = value;
-        });
+      onSaved: (String value) {
+        _userCredentials['email'] = value;
+      },
+      validator: (String value) {
+        if (value.isEmpty ||
+            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
+          return 'Email is required';
+        }
       },
     );
   }
 
   Widget _buildPasswordTextField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
         labelText: 'Password',
         filled: true,
         fillColor: Colors.white,
       ),
       obscureText: true,
-      onChanged: (String value) {
-        setState(() {
-          _passwordValue = value;
-        });
+      onSaved: (String value) {
+        _userCredentials['password'] = value;
+      },
+      validator: (String value) {
+        if (value.isEmpty || value.length < 8) {
+          return 'Password is required (8+ characters)';
+        }
       },
     );
   }
 
   Widget _buildTermsSwitch() {
     return SwitchListTile(
-      value: _termsValue,
+      value: _userCredentials['acceptTerms'],
       onChanged: (bool value) {
         setState(() {
-          _termsValue = value;
+          _userCredentials['acceptTerms'] = value;
         });
       },
       title: Text('Accept Terms'),
@@ -69,7 +81,12 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   void _submitForm() {
-    print(_emailValue + ' - ' + _passwordValue);
+    print(_userCredentials['email']); 
+    print(_userCredentials['password']);
+    if (!_loginFormKey.currentState.validate() || !_userCredentials['acceptTerms']) {
+      return;
+    }
+    _loginFormKey.currentState.save();
     Navigator.pushReplacementNamed(context, 'auth');
   }
 
@@ -82,27 +99,37 @@ class _AuthPageState extends State<AuthPage> {
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: Container(
-        decoration: BoxDecoration(image: _buildBackgroundImange()),
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              alignment: Alignment.center,
-              width: targetWidth,
-              child: Column(children: <Widget>[
-                _buildEmailTextField(),
-                SizedBox(height: 10.0),
-                _buildPasswordTextField(),
-                _buildTermsSwitch(),
-                Container(
-                  margin: EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    child: Text('Login'),
-                    onPressed: _submitForm,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          decoration: BoxDecoration(image: _buildBackgroundImange()),
+          padding: EdgeInsets.all(16.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                alignment: Alignment.center,
+                width: targetWidth,
+                child: Form(
+                  key: _loginFormKey,
+                  child: Column(
+                    children: <Widget>[
+                      _buildEmailTextField(),
+                      SizedBox(height: 10.0),
+                      _buildPasswordTextField(),
+                      _buildTermsSwitch(),
+                      Container(
+                        margin: EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                          child: Text('Login'),
+                          onPressed: _submitForm,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ]),
+              ),
             ),
           ),
         ),
