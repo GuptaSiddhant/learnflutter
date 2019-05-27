@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import './product_edit.dart';
 import './product_list.dart';
-import '../models/product.dart';
+// import '../models/product.dart';
 
 class ProductsAdminPage extends StatefulWidget {
-  final List<Product> products;
-  final Function addProduct;
-  final Function updateProduct;
-  final Function deleteProduct;
+  // final List<Product> products;
+  // final Function addProduct;
+  // final Function updateProduct;
+  // final Function deleteProduct;
 
-  ProductsAdminPage(
-      {this.products, this.updateProduct, this.addProduct, this.deleteProduct});
+  // ProductsAdminPage(
+  //     {this.products, this.updateProduct, this.addProduct, this.deleteProduct});
 
   @override
   State<StatefulWidget> createState() {
@@ -68,13 +68,8 @@ class _ProductAdminPageState extends State<ProductsAdminPage> {
           ),
           body: TabBarView(
             children: <Widget>[
-              ProductEditPage(
-                addProduct: widget.addProduct,
-              ),
-              ProductListPage(
-                  products: widget.products,
-                  updateProduct: widget.updateProduct,
-                  deleteProduct: widget.deleteProduct),
+              ProductEditPage(),
+              ProductListPage(),
             ],
           )
 

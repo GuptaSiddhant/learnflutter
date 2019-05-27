@@ -6,7 +6,7 @@ import './pages/auth.dart';
 import './pages/products.dart';
 import './pages/products_admin.dart';
 import './pages/product.dart';
-import './models/product.dart';
+// import './models/product.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -59,12 +59,8 @@ class _MyAppState extends State<MyApp> {
       // home: AuthPage(),
       routes: {
         '/': (BuildContext context) => AuthPage(),
-        '/products': (BuildContext context) => ProductsPage(
-              
-            ),
-        '/admin': (BuildContext context) => ProductsAdminPage(
-              
-            ),
+        '/products': (BuildContext context) => ProductsPage(),
+        '/admin': (BuildContext context) => ProductsAdminPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
@@ -72,7 +68,7 @@ class _MyAppState extends State<MyApp> {
           return null;
         }
         if (pathElements[1] == 'product') {
-          final int index = int.parse(pathElements[2]);
+          // final int index = int.parse(pathElements[2]);
           return MaterialPageRoute<bool>(
             builder: (BuildContext context) => ProductPage(),
           );
@@ -81,9 +77,7 @@ class _MyAppState extends State<MyApp> {
       },
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-          builder: (BuildContext context) => ProductsPage(
-                
-              ),
+          builder: (BuildContext context) => ProductsPage(),
         );
       },
     );
