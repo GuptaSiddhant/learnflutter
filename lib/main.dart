@@ -6,6 +6,7 @@ import './pages/auth.dart';
 import './pages/products.dart';
 import './pages/products_admin.dart';
 import './pages/product.dart';
+import './models/product.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -20,26 +21,25 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final List<Map<String, dynamic>> _products = [];
+  // final List<Product> _products = [];
 
-  void _addProduct(Map<String, dynamic> product) {
-    setState(() {
-      _products.add(product);
-    });
-  }
+  // void _addProduct(Product product) {
+  //   setState(() {
+  //     _products.add(product);
+  //   });
+  // }
 
-  void _updateProduct({Map<String, dynamic> product, int index}) {
-    setState(() {
-      _products[index] = product;
-    });
-  }
+  // void _updateProduct({Product product, int index}) {
+  //   setState(() {
+  //     _products[index] = product;
+  //   });
+  // }
 
-
-  void _deleteProduct(int index) {
-    setState(() {
-      _products.removeAt(index);
-    });
-  }
+  // void _deleteProduct(int index) {
+  //   setState(() {
+  //     _products.removeAt(index);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.indigo,
         primaryColor: Colors.indigo,
         accentColor: Colors.blue,
-        // buttonColor: Colors.blue,      
+        // buttonColor: Colors.blue,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -60,13 +60,10 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (BuildContext context) => AuthPage(),
         '/products': (BuildContext context) => ProductsPage(
-              products: _products,
+              
             ),
         '/admin': (BuildContext context) => ProductsAdminPage(
-              products: _products,
-              addProduct: _addProduct,
-              updateProduct: _updateProduct,
-              deleteProduct: _deleteProduct,
+              
             ),
       },
       onGenerateRoute: (RouteSettings settings) {
@@ -77,7 +74,7 @@ class _MyAppState extends State<MyApp> {
         if (pathElements[1] == 'product') {
           final int index = int.parse(pathElements[2]);
           return MaterialPageRoute<bool>(
-            builder: (BuildContext context) => ProductPage(_products[index]),
+            builder: (BuildContext context) => ProductPage(),
           );
         }
         return null;
@@ -85,7 +82,7 @@ class _MyAppState extends State<MyApp> {
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           builder: (BuildContext context) => ProductsPage(
-                products: _products,
+                
               ),
         );
       },

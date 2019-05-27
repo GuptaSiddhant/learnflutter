@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 
 import '../widgets/products/price_tag.dart';
 import '../widgets/products/address_tag.dart';
+import '../models/product.dart';
 
 class ProductPage extends StatelessWidget {
-  final Map<String, dynamic> product;
+  final Product product;
 
-  ProductPage(this.product);
+  ProductPage({this.product});
 
   // _showWarningDialog(context) {
   //   showDialog(
@@ -46,7 +47,7 @@ class ProductPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(product['title']),
+          title: Text(product.title),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.favorite_border),
@@ -61,14 +62,14 @@ class ProductPage extends StatelessWidget {
               Container(
                 height: 250.0,
                 width: MediaQuery.of(context).size.width,
-                child: Image.asset(product['imageUrl'], fit: BoxFit.cover),
+                child: Image.asset(product.image, fit: BoxFit.cover),
               ),
               Container(
                 margin: EdgeInsets.all(16.0),
                 child: Column(
                   children: <Widget>[
                     Text(
-                      product['title'],
+                      product.title,
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
@@ -83,7 +84,7 @@ class ProductPage extends StatelessWidget {
                         SizedBox(
                           width: 8,
                         ),
-                        PriceTagWidget(product['price'].toString()),
+                        PriceTagWidget(product.price.toString()),
                       ],
                     ),
                     SizedBox(height: 16.0),
@@ -91,7 +92,7 @@ class ProductPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          product['description'],
+                          product.description,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18.0,

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../models/product.dart';
+
 class ProductEditPage extends StatefulWidget {
-  final Map<String, dynamic> product;
+  final Product product;
   final Function addProduct;
   final Function updateProduct;
   final int productIndex;
@@ -26,7 +28,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
   Widget _buildTitleTextField() {
     return TextFormField(
-      initialValue: widget.product == null ? '' : widget.product['title'],
+      initialValue: widget.product == null ? '' : widget.product.title,
       decoration: InputDecoration(labelText: 'Title'),
       autofocus: true,
       validator: (String value) {
@@ -43,7 +45,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   Widget _buildDescriptionTextField() {
     return TextFormField(
       maxLines: 4,
-      initialValue: widget.product == null ? '' : widget.product['description'],
+      initialValue: widget.product == null ? '' : widget.product.description,
       decoration: InputDecoration(labelText: 'Description'),
       validator: (String value) {
         if (value.isEmpty || value.length < 10) {
@@ -59,7 +61,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   Widget _buildPriceTextField() {
     return TextFormField(
       initialValue:
-          widget.product == null ? '' : widget.product['price'].toString(),
+          widget.product == null ? '' : widget.product.price.toString(),
       keyboardType: TextInputType.number,
       decoration: InputDecoration(labelText: 'Price'),
       validator: (String value) {
@@ -73,7 +75,6 @@ class _ProductEditPageState extends State<ProductEditPage> {
       },
     );
   }
-
 
   Widget _buildPageContent(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -112,7 +113,11 @@ class _ProductEditPageState extends State<ProductEditPage> {
       return;
     }
     _productAddFormKey.currentState.save();
-    final Map<String, dynamic> product = _formData;
+    final Product product = Product(
+        title: _formData["title"],
+        description: _formData['description'],
+        price: double.parse(_formData['price']),
+        image: _formData['imageUrl']);
     if (widget.product == null) {
       widget.addProduct(product);
     } else {
@@ -121,12 +126,10 @@ class _ProductEditPageState extends State<ProductEditPage> {
     Navigator.pushReplacementNamed(context, '/products');
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final Widget pageContent = _buildPageContent(context);
-    
+
     return widget.product == null
         ? pageContent
         : Scaffold(

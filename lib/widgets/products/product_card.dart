@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import './price_tag.dart';
 import './address_tag.dart';
+import '../../models/product.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  final Map<String, dynamic> product;
+  final Product product;
   final int productIndex;
 
   ProductCardWidget(this.product, this.productIndex);
@@ -15,7 +16,7 @@ class ProductCardWidget extends StatelessWidget {
       width: 100.0,
       height: 100.0,
       child: Image.asset(
-        product['imageUrl'],
+        product.image,
         fit: BoxFit.cover,
       ),
     );
@@ -24,7 +25,7 @@ class ProductCardWidget extends StatelessWidget {
   Widget _buildProductTitle() {
     return Container(
       child: Text(
-        product['title'],
+        product.title,
         style: TextStyle(
           fontWeight: FontWeight.bold,
           // color: Theme.of(context).primaryColor,
@@ -93,7 +94,7 @@ class ProductCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                PriceTagWidget(product['price'].toString()),
+                PriceTagWidget(product.price.toString()),
                 _buildActionButtons(context),
               ],
             ),
