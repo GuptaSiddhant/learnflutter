@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import '../widgets/products/price_tag.dart';
 import '../widgets/products/address_tag.dart';
 import '../models/product.dart';
+import '../scoped-models/products_model.dart';
 
 class ProductPage extends StatelessWidget {
-  final Product product;
+  final int productIndex;
 
-  ProductPage({this.product});
+  ProductPage({this.productIndex});
 
   // _showWarningDialog(context) {
   //   showDialog(
@@ -45,78 +47,83 @@ class ProductPage extends StatelessWidget {
         Navigator.pop(context, false);
         return Future.value(false);
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(product.title),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.favorite_border),
-              onPressed: () {},
-            )
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                height: 250.0,
-                width: MediaQuery.of(context).size.width,
-                child: Image.asset(product.image, fit: BoxFit.cover),
-              ),
-              Container(
-                margin: EdgeInsets.all(16.0),
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      product.title,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28.0,
-                      ),
-                    ),
-                    SizedBox(height: 8.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        AddressTagWidget('Kamppi, Helsinki, Finland'),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        PriceTagWidget(product.price.toString()),
-                      ],
-                    ),
-                    SizedBox(height: 16.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      child: ScopedModelDescendant<ProductsModel>(
+        builder: (BuildContext context, Widget child, ProductsModel model) {
+          final Product product = model.products[productIndex];
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(product.title),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.favorite_border),
+                  onPressed: () {},
+                )
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 250.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: Image.asset(product.image, fit: BoxFit.cover),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(16.0),
+                    child: Column(
                       children: <Widget>[
                         Text(
-                          product.description,
-                          textAlign: TextAlign.center,
+                          product.title,
                           style: TextStyle(
-                            fontSize: 18.0,
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28.0,
                           ),
                         ),
+                        SizedBox(height: 8.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            AddressTagWidget('Kamppi, Helsinki, Finland'),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            PriceTagWidget(product.price.toString()),
+                          ],
+                        ),
+                        SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              product.description,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8.0),
                       ],
                     ),
-                    SizedBox(height: 8.0),
-                  ],
-                ),
-              ),
+                  ),
 
-              // ButtonBar(
-              //   alignment: MainAxisAlignment.center,
-              //   children: <Widget>[
-              //     RaisedButton(
-              //       child: Text('Delete'),
-              //       onPressed: () => _showWarningDialog(context),
-              //     )
-              //   ],
-              // ),
-            ],
-          ),
-        ),
+                  // ButtonBar(
+                  //   alignment: MainAxisAlignment.center,
+                  //   children: <Widget>[
+                  //     RaisedButton(
+                  //       child: Text('Delete'),
+                  //       onPressed: () => _showWarningDialog(context),
+                  //     )
+                  //   ],
+                  // ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
