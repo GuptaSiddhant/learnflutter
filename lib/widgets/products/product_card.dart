@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import './price_tag.dart';
 import './address_tag.dart';
 import '../../models/product.dart';
+import '../../scoped-models/main.dart';
 
 class ProductCardWidget extends StatelessWidget {
   final Product product;
@@ -40,12 +42,20 @@ class ProductCardWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        IconButton(
-          padding: EdgeInsets.all(0),
-          icon: Icon(Icons.favorite_border),
-          color: Colors.red,
-          onPressed: () {},
-        ),
+        ScopedModelDescendant<MainModel>(
+            builder: (BuildContext context, Widget child, MainModel model) {
+          return IconButton(
+            padding: EdgeInsets.all(0),
+            icon: model.allProducts[productIndex].isFavourite
+                ? Icon(Icons.favorite)
+                : Icon(Icons.favorite_border),
+            color: Colors.red,
+            onPressed: () {
+              model.selectProduct(productIndex);
+              model.toggleProductFavouriteStatus();
+            },
+          );
+        }),
         IconButton(
           padding: EdgeInsets.all(0),
           icon: Icon(Icons.info),
@@ -66,7 +76,7 @@ class ProductCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(top:16.0, left: 16.0, right: 16.0),
+      margin: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
       child: Container(
         height: 100.0,
         child: Row(
@@ -86,6 +96,7 @@ class ProductCardWidget extends StatelessWidget {
                   _buildProductTitle(),
                   SizedBox(height: 8.0),
                   AddressTagWidget('Kamppi, Helsinki, Finland'),
+                  Text(product.userEmail),
                 ],
               ),
             ),

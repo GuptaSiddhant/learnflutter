@@ -1,10 +1,7 @@
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:learner/models/product.dart';
 import 'package:scoped_model/scoped_model.dart';
-// import 'package:flutter/rendering.dart';
 
-import './scoped-models/products_model.dart';
+import './scoped-models/main.dart';
 import './pages/auth.dart';
 import './pages/products.dart';
 import './pages/products_admin.dart';
@@ -27,8 +24,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<ProductsModel>(
-      model: ProductsModel(),
+    return ScopedModel<MainModel>(
+      model: MainModel(),
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
