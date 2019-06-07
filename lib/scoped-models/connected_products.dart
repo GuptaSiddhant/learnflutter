@@ -1,4 +1,6 @@
 import 'package:scoped_model/scoped_model.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
 import '../models/user.dart';
@@ -11,16 +13,30 @@ mixin ConnectedProductsModel on Model {
 
   void addProduct(
       String title, String description, String image, double price) {
-    final Product newProduct = Product(
-      title: title,
-      description: description,
-      image: image,
-      price: price,
-      userEmail: _authenticatedUser.email,
-      userId: _authenticatedUser.id,
-    );
-    _products.add(newProduct);
-    _selProductIndex = null;
+    final Map<String, dynamic> productData = {
+      'title': title,
+      'description': description,
+      'price': price,
+      'image':
+          'https://cdn11.bigcommerce.com/s-ham8sjk/products/274/images/774/couverture_chocolate_milk_chocolate__92101.1515385422.600.600.jpg?c=2',
+    };
+    http
+        .post('https://flutter-products-d9f3d.firebaseio.com/products.json',
+            body: json.encode(productData))
+        .then((http.Response response) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final Product newProduct = Product(
+        id: responseData['name'],
+        title: title,
+        description: description,
+        image: image,
+        price: price,
+        userEmail: _authenticatedUser.email,
+        userId: _authenticatedUser.id,
+      );
+      _products.add(newProduct);
+      notifyListeners();
+    });
   }
 }
 
@@ -55,6 +71,7 @@ mixin ProductsModel on ConnectedProductsModel {
   void updateProduct(
       String title, String description, String image, double price) {
     final Product newProduct = Product(
+      id: '',
       title: title,
       description: description,
       image: image,
@@ -73,10 +90,19 @@ mixin ProductsModel on ConnectedProductsModel {
     notifyListeners();
   }
 
+  void fetchProducts() {
+    http
+        .get('https://flutter-products-d9f3d.firebaseio.com/products.json')
+        .then((http.Response response) {
+      print(json.decode(response.body));
+    });
+  }
+
   void toggleProductFavouriteStatus() {
     final bool isCurrentylFavourite = _products[_selProductIndex].isFavourite;
     final bool newFavouriteStatus = !isCurrentylFavourite;
     final Product updatedProduct = Product(
+      id: '',
         title: selectedProduct.title,
         description: selectedProduct.description,
         price: selectedProduct.price,
@@ -100,9 +126,6 @@ mixin ProductsModel on ConnectedProductsModel {
     notifyListeners();
   }
 }
-
-
-
 
 mixin UserModel on ConnectedProductsModel {
   // User _authenticatedUser;
