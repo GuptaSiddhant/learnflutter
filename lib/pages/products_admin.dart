@@ -1,45 +1,24 @@
 import 'package:flutter/material.dart';
+
 import './product_edit.dart';
 import './product_list.dart';
-// import '../models/product.dart';
 
-class ProductsAdminPage extends StatefulWidget {
-  // final List<Product> products;
-  // final Function addProduct;
-  // final Function updateProduct;
-  // final Function deleteProduct;
-
-  // ProductsAdminPage(
-  //     {this.products, this.updateProduct, this.addProduct, this.deleteProduct});
-
-  @override
-  State<StatefulWidget> createState() {
-    return _ProductAdminPageState();
-  }
-}
-
-class _ProductAdminPageState extends State<ProductsAdminPage> {
+class ProductsAdminPage extends StatelessWidget {
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
       child: Column(
         children: <Widget>[
           AppBar(
             automaticallyImplyLeading: false,
-            title: Text('Menu'),
+            title: Text('Choose'),
           ),
           ListTile(
             leading: Icon(Icons.shop),
-            title: Text('Products List'),
+            title: Text('All Products'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/products');
             },
-          ),
-          ListTile(
-            title: Text('Logout'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/');
-            },
-          ),
+          )
         ],
       ),
     );
@@ -50,31 +29,26 @@ class _ProductAdminPageState extends State<ProductsAdminPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          drawer: _buildSideDrawer(context),
-          appBar: AppBar(
-            title: Text('Admin'),
-            bottom: TabBar(
-              tabs: <Widget>[
-                Tab(
-                  text: 'Create Product',
-                  // icon: Icon(Icons.add),
-                ),
-                Tab(
-                  text: 'Products',
-                  // icon: Icon(Icons.list),
-                ),
-              ],
-            ),
-          ),
-          body: TabBarView(
-            children: <Widget>[
-              ProductEditPage(),
-              ProductListPage(),
+        drawer: _buildSideDrawer(context),
+        appBar: AppBar(
+          title: Text('Manage Products'),
+          bottom: TabBar(
+            tabs: <Widget>[
+              Tab(
+                icon: Icon(Icons.create),
+                text: 'Create Product',
+              ),
+              Tab(
+                icon: Icon(Icons.list),
+                text: 'My Products',
+              ),
             ],
-          )
-
-          // bottomNavigationBar: ,
           ),
+        ),
+        body: TabBarView(
+          children: <Widget>[ProductEditPage(), ProductListPage()],
+        ),
+      ),
     );
   }
 }

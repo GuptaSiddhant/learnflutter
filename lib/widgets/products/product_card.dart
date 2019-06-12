@@ -1,73 +1,58 @@
 import 'package:flutter/material.dart';
+
 import 'package:scoped_model/scoped_model.dart';
 
 import './price_tag.dart';
 import './address_tag.dart';
+import '../ui_elements/title_default.dart';
 import '../../models/product.dart';
 import '../../scoped-models/main.dart';
 
-class ProductCardWidget extends StatelessWidget {
+class ProductCard extends StatelessWidget {
   final Product product;
   final int productIndex;
 
-  ProductCardWidget(this.product, this.productIndex);
+  ProductCard(this.product, this.productIndex);
 
-  Widget _buildProductImage() {
+  Widget _buildTitlePriceRow() {
     return Container(
-      margin: EdgeInsets.only(right: 8.0),
-      width: 100.0,
-      height: 100.0,
-      child: Image.asset(
-        product.image,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-  Widget _buildProductTitle() {
-    return Container(
-      child: Text(
-        product.title,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          // color: Theme.of(context).primaryColor,
-          fontSize: 24.0,
-        ),
+      padding: EdgeInsets.only(top: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TitleDefault(product.title),
+          SizedBox(
+            width: 8.0,
+          ),
+          PriceTag(product.price.toString())
+        ],
       ),
     );
   }
 
   Widget _buildActionButtons(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.end,
+    return ButtonBar(
+      alignment: MainAxisAlignment.center,
       children: <Widget>[
-        ScopedModelDescendant<MainModel>(
-            builder: (BuildContext context, Widget child, MainModel model) {
-          return IconButton(
-            padding: EdgeInsets.all(0),
-            icon: model.allProducts[productIndex].isFavourite
-                ? Icon(Icons.favorite)
-                : Icon(Icons.favorite_border),
-            color: Colors.red,
-            onPressed: () {
-              model.selectProduct(productIndex);
-              model.toggleProductFavouriteStatus();
-            },
-          );
-        }),
         IconButton(
-          padding: EdgeInsets.all(0),
           icon: Icon(Icons.info),
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).accentColor,
           onPressed: () => Navigator.pushNamed<bool>(
-                context,
-                '/product/' + productIndex.toString(),
-              ).then((bool value) {
-                // if (value) {
-                //   deleteProduct(productIndex);
-                // }
-              }),
+              context, '/product/' + productIndex.toString()),
+        ),
+        ScopedModelDescendant<MainModel>(
+          builder: (BuildContext context, Widget child, MainModel model) {
+            return IconButton(
+              icon: Icon(model.allProducts[productIndex].isFavorite
+                  ? Icons.favorite
+                  : Icons.favorite_border),
+              color: Colors.red,
+              onPressed: () {
+                model.selectProduct(productIndex);
+                model.toggleProductFavoriteStatus();
+              },
+            );
+          },
         ),
       ],
     );
@@ -76,43 +61,16 @@ class ProductCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-      child: Container(
-        height: 100.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                _buildProductImage(),
-              ],
-            ),
-            SizedBox(width: 8.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _buildProductTitle(),
-                  SizedBox(height: 8.0),
-                  AddressTagWidget('Kamppi, Helsinki, Finland'),
-                  Text(product.userEmail),
-                ],
-              ),
-            ),
-            SizedBox(width: 8.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                PriceTagWidget(product.price.toString()),
-                _buildActionButtons(context),
-              ],
-            ),
-            SizedBox(width: 8.0),
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          Image.network(product.image),
+          _buildTitlePriceRow(),
+          AddressTag('Union Square, San Francisco'),
+          Text(product.userEmail),
+          _buildActionButtons(context)
+        ],
       ),
     );
+    
   }
 }

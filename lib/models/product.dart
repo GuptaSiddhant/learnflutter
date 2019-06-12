@@ -4,10 +4,9 @@ class Product {
   final String id;
   final String title;
   final String description;
-  final String image;
   final double price;
-  final bool isFavourite;
-
+  final String image;
+  final bool isFavorite;
   final String userEmail;
   final String userId;
 
@@ -19,5 +18,5 @@ class Product {
       @required this.image,
       @required this.userEmail,
       @required this.userId,
-      this.isFavourite = false});
+      this.isFavorite = false});
 }
